@@ -6,53 +6,35 @@ import LoadingPage from "@/app/components/LoadingPage";
 import DrawingLoadingPage from "@/app/components/DrawingLoadingPage";
 import ComicResultPage from "@/app/components/ComicResultPage";
 import ShareOverlay from "@/app/components/ShareOverlay";
-import StyleButton from "@/app/components/StyleButton";
-import TopHeader from "@/app/components/TopHeader";
 import CustomToast from "@/app/components/CustomToast";
+import ComicStyleSelection from "@/app/components/ComicStyleSelection";
 import GuangDianLiZi from "@/app/components/GuangDianLiZi";
-import TopicInspirationModule, {
-  TopicItem,
-} from "@/app/components/TopicInspirationModule";
 import { generateScript } from "@/utils/generateScript";
 import { generateComicImages } from "@/utils/generateComicImage";
 import type { PanelData } from "@/utils/generateScript";
-import imgImage from "figma:asset/43f5060b866b8f8120b3cc38de32f021bccdd72e.png";
-import imgBackground10 from "figma:asset/284d95d44fc05452223bfdc80ec1ead2992fdfad.png";
-import imgImage1 from "figma:asset/41f5bc5ce21f66d19e044c732872e545da5c85c2.png";
-import imgImage2 from "figma:asset/d11bae0c4a990af9f311de74cb74ba8942251105.png";
-import imgImage3 from "figma:asset/1d8785d386faefce2995b19e9dc624bda0f0a905.png";
-import imgImage4 from "figma:asset/c429b6ee4e33878fd1233ec4aab222b7ba651367.png";
-import imgImage5 from "figma:asset/06f73549e8831bc7c928c9ce0e18c0f2de4ed78c.png";
-import imgImage6 from "figma:asset/b7f4048c7007d2bededa6552d67be0b630090bb8.png";
-import imgImage7 from "figma:asset/8bc68a58078960f25d10cdd9cbefd4f89506c20d.png";
-import imgImage8 from "figma:asset/0a8396393e973bffff1393e9db032bf3f604abc9.png";
-import imgImage9 from "figma:asset/68b77d83ff93b272448ac91a9cdab1e0120570fa.png";
-import imgImage10 from "figma:asset/4fe6ded441013e64ccfa57234faf7fc057255ccc.png";
-import imgImage11 from "figma:asset/273e876e797790147a08fbf09c34df159b5faafd.png";
-import imgImage16 from "figma:asset/0ec1508d134126f142a924d5b76a32b6d79b6b51.png";
-import imgImgTuanzi from "figma:asset/b739ae5a918ab7032626d7f0093f191f555f8267.png";
-import imgBg from "figma:asset/5a0ac0a879b18c754e27b297ce3c5de07caee829.png";
-import imgImage12 from "figma:asset/43192f93114af8b9a5406264c1649eef98b2df77.png";
+import svgPaths from "@/imports/svg-tiz03u7qeq";
+
+// Import all images from Figma
+import imgBg from "figma:asset/a414cc1cab9532be936d7017bf7b90b9478bb82f.png";
+import imgGroups1 from "figma:asset/78de72127505462b15e72a0e27b2247c78e06c34.png";
+import imgBgNeirong from "figma:asset/cb50e47ac21ede477f3a8f4c8676b039fcd538d5.png";
+import imgImgTuanzi2 from "figma:asset/8a8f345f168f409597b3a2560c2125b19d6aad97.png";
+import imgDengpao from "figma:asset/b7f4048c7007d2bededa6552d67be0b630090bb8.png";
+import imgDenglong from "figma:asset/c429b6ee4e33878fd1233ec4aab222b7ba651367.png";
+import imgEmo from "figma:asset/d11bae0c4a990af9f311de74cb74ba8942251105.png";
+import imgShangchuan1 from "figma:asset/8bc68a58078960f25d10cdd9cbefd4f89506c20d.png";
+import imgButton from "figma:asset/9d17f46e43c53e5709b80964a914732dc3612d5d.png";
+import imgLogo from "figma:asset/c301e171aed62395c79f7ef941923a62626a0795.png";
+import img from "figma:asset/cacfd9097e1934d3ced6fd030f4b6949d7355d1d.png";
+import img1 from "figma:asset/0998c63f86525358d26fafa731b3801081346889.png";
+import imgQ from "figma:asset/faef3107ff6973d86c8cbf3fb1a6365202db6d1a.png";
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<
-    "home" | "script" | "loading" | "drawing" | "result"
-  >("home");
-  const [selectedStyle, setSelectedStyle] = useState<
-    string | null
-  >("japanese"); // 默认选中第一个按钮：日式漫画
-  const [selectedTopics, setSelectedTopics] = useState<
-    Set<string>
-  >(new Set());
+  const [currentPage, setCurrentPage] = useState<"home" | "script" | "loading" | "drawing" | "result">("home");
+  const [selectedStyle, setSelectedStyle] = useState<string | null>("japanese");
+  const [selectedTopics, setSelectedTopics] = useState<Set<string>>(new Set());
   const [storyText, setStoryText] = useState("");
-  const [placeholder, setPlaceholder] = useState(
-    "例如：大年三十，我回到老家,爷爷奶奶准备了一大桌年夜饭..或者写下你的新年愿望：希望心的一年能升职加薪，脱单成功...",
-  );
-  const [uploadedImages, setUploadedImages] = useState<
-    string[]
-  >([]);
-
-  // 所有话题按钮的旋转状态
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [topicRotations, setTopicRotations] = useState({
     mogui: 0,
     chunjie: 0,
@@ -61,39 +43,37 @@ export default function App() {
     youdu: 0,
     laoshi: 0,
   });
-
-  const [generatedPanels, setGeneratedPanels] = useState<
-    PanelData[]
-  >([]);
-  const [
-    isReturningFromOtherPage,
-    setIsReturningFromOtherPage,
-  ] = useState(false);
-  const [generatedComicImages, setGeneratedComicImages] =
-    useState<string[]>([]);
-
-  // 用ref来追踪是否已经开始生成图片，避免重复调用
+  const [generatedPanels, setGeneratedPanels] = useState<PanelData[]>([]);
+  const [isReturningFromOtherPage, setIsReturningFromOtherPage] = useState(false);
+  const [generatedComicImages, setGeneratedComicImages] = useState<string[]>([]);
   const isGeneratingImage = useRef(false);
-
-  // Toast状态管理
   const [toastMessage, setToastMessage] = useState("");
   const [isToastVisible, setIsToastVisible] = useState(false);
+  const [isShareOverlayOpen, setIsShareOverlayOpen] = useState(false);
+  // 保存用于生成漫画的剧本内容，用于"重新编辑"功能
+  const [savedPanelsForEdit, setSavedPanelsForEdit] = useState<PanelData[]>([]);
+  // 保存生成的漫画标题
+  const [comicTitle, setComicTitle] = useState<string>("快看！漫画我的故事");
+  // 保存四格漫画的布局类型
+  const [comicLayoutType, setComicLayoutType] = useState<number>(1);
 
-  // 分享浮层状态管理
-  const [isShareOverlayOpen, setIsShareOverlayOpen] =
-    useState(false);
-
-  // 显示toast的函数
   const showToast = (message: string) => {
     setToastMessage(message);
     setIsToastVisible(true);
-    // 2秒后自动隐藏
-    setTimeout(() => {
-      setIsToastVisible(false);
-    }, 2000);
+    setTimeout(() => setIsToastVisible(false), 2000);
   };
 
-  // 话题提示词库
+  // Topic configurations
+  const topicItems = [
+    { id: "chunjie", text: "春节名场面", type: "hot" as const, icon: imgDenglong, fontFamily: "Medium" },
+    { id: "mogui", text: "魔鬼亲戚", type: "hot" as const, icon: imgEmo, fontFamily: "Medium" },
+    { id: "suliao", text: "塑料友情", type: "normal" as const, fontSize: "23.649px", fontFamily: "Medium" },
+    { id: "shenxian", text: "神仙对象", type: "normal" as const, fontSize: "24px", fontFamily: "Medium" },
+    { id: "youdu", text: "有毒父母", type: "normal" as const, fontSize: "23.649px", fontFamily: "Medium" },
+    { id: "laoshi", text: "我的老师", type: "normal" as const, fontSize: "23.649px", fontFamily: "Medium" },
+  ];
+
+  // Topic prompts (keeping existing logic)
   const topicPrompts = {
     shenxian: [
       "我梦见自己成了神仙，能飞天遁地，第一件事就是飞回老家看望爷爷奶奶...",
@@ -139,21 +119,6 @@ export default function App() {
     ],
   };
 
-  // 话题数据配置
-  const topicItems: TopicItem[] = [
-    {
-      id: "chunjie",
-      text: "春节名场面",
-      type: "hot",
-      icon: "denglong",
-    },
-    { id: "mogui", text: "魔鬼亲戚", type: "hot", icon: "emo" },
-    { id: "shenxian", text: "神仙对象", type: "normal" },
-    { id: "suliao", text: "塑料友情", type: "normal" },
-    { id: "youdu", text: "有毒父母", type: "normal" },
-    { id: "laoshi", text: "我的老师", type: "normal" },
-  ];
-
   const toggleTopic = (topicId: string) => {
     const newTopics = new Set(selectedTopics);
     if (newTopics.has(topicId)) {
@@ -163,7 +128,6 @@ export default function App() {
     }
     setSelectedTopics(newTopics);
 
-    // 每次点击都累积旋转360度（仅用于热度话题）
     if (topicId in topicRotations) {
       setTopicRotations((prev) => ({
         ...prev,
@@ -171,28 +135,20 @@ export default function App() {
       }));
     }
 
-    // 更新文本内容（如果有对应提示词）
     if (topicId in topicPrompts) {
-      const prompts =
-        topicPrompts[topicId as keyof typeof topicPrompts];
-      const randomPrompt =
-        prompts[Math.floor(Math.random() * prompts.length)];
+      const prompts = topicPrompts[topicId as keyof typeof topicPrompts];
+      const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
       setStoryText(randomPrompt);
     }
   };
 
-  const handleImageUpload = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
 
     const newImages: string[] = [];
     const remainingSlots = 4 - uploadedImages.length;
-    const filesToProcess = Math.min(
-      files.length,
-      remainingSlots,
-    );
+    const filesToProcess = Math.min(files.length, remainingSlots);
 
     for (let i = 0; i < filesToProcess; i++) {
       const file = files[i];
@@ -201,10 +157,7 @@ export default function App() {
         if (event.target?.result) {
           newImages.push(event.target.result as string);
           if (newImages.length === filesToProcess) {
-            setUploadedImages([
-              ...uploadedImages,
-              ...newImages,
-            ]);
+            setUploadedImages([...uploadedImages, ...newImages]);
           }
         }
       };
@@ -213,94 +166,74 @@ export default function App() {
   };
 
   const removeImage = (index: number) => {
-    setUploadedImages(
-      uploadedImages.filter((_, i) => i !== index),
-    );
+    setUploadedImages(uploadedImages.filter((_, i) => i !== index));
   };
 
-  // Loading页面自动跳转逻辑
   useEffect(() => {
     if (currentPage === "loading") {
-      // 在loading开始时生成剧本
-      const panels = generateScript(
-        storyText,
-        selectedStyle,
-        selectedTopics,
-      );
-      setGeneratedPanels(panels);
-
-      // 模拟加载过程：等待3秒后跳转到剧本页面
-      const timer = setTimeout(() => {
-        setCurrentPage("script");
-      }, 3000);
-
+      const result = generateScript(storyText, selectedStyle, selectedTopics);
+      setGeneratedPanels(result.panels);
+      setComicTitle(result.title); // 保存生成的标题
+      // 按照概率随机选择布局类型：布局1(50%), 布局4(25%), 布局5(25%)
+      const random = Math.random();
+      let layoutType;
+      if (random < 0.5) {
+        layoutType = 1; // 50%概率
+      } else if (random < 0.75) {
+        layoutType = 4; // 25%概率
+      } else {
+        layoutType = 5; // 25%概率
+      }
+      setComicLayoutType(layoutType);
+      const timer = setTimeout(() => setCurrentPage("script"), 3000);
       return () => clearTimeout(timer);
     }
   }, [currentPage, storyText, selectedStyle, selectedTopics]);
 
-  // 绘图Loading页面自动跳转逻辑 - 独立的useEffect
   useEffect(() => {
     if (currentPage === "drawing") {
-      // 重置图片生成标志
       isGeneratingImage.current = false;
-
-      // 在绘图期间生成漫画图片
       const generateImage = async () => {
         try {
-          if (
-            selectedStyle &&
-            generatedPanels.length > 0 &&
-            !isGeneratingImage.current
-          ) {
+          if (selectedStyle && generatedPanels.length > 0 && !isGeneratingImage.current) {
             isGeneratingImage.current = true;
-            const imageUrls = await generateComicImages(
-              generatedPanels,
-              selectedStyle,
-            );
+            console.log('开始生成漫画图片, 风格:', selectedStyle);
+            console.log('分镜数据:', generatedPanels);
+            const imageUrls = await generateComicImages(generatedPanels, selectedStyle);
+            console.log('生成的图片URLs:', imageUrls);
             setGeneratedComicImages(imageUrls);
+            console.log('图片已设置到state');
           }
         } catch (error) {
           console.error("生成漫画图片失败:", error);
         }
       };
-
       generateImage();
-
-      // 模拟绘图过程：等待3秒后跳转到结果页面
-      const timer = setTimeout(() => {
-        setCurrentPage("result");
-      }, 3000);
-
+      const timer = setTimeout(() => setCurrentPage("result"), 3000);
       return () => clearTimeout(timer);
     }
-  }, [currentPage]); // 只依赖currentPage，避免无限循环
+  }, [currentPage]);
 
-  // 如果当前是剧本页面，显示剧本页面组件
   if (currentPage === "script") {
     return (
       <ResponsiveWrapper>
         <ScriptPage
           initialPanels={generatedPanels}
           onStartDrawing={(editedPanels) => {
-            // 保存编辑后的panels
             setGeneratedPanels(editedPanels);
+            setSavedPanelsForEdit(editedPanels); // 保存剧本内容用于"重新编辑"
             setCurrentPage("drawing");
           }}
           onBack={() => {
             setIsReturningFromOtherPage(true);
             setCurrentPage("home");
-            // 500ms后重置状态，避免影响后续交互
-            setTimeout(
-              () => setIsReturningFromOtherPage(false),
-              500,
-            );
+            setTimeout(() => setIsReturningFromOtherPage(false), 500);
           }}
         />
       </ResponsiveWrapper>
     );
   }
 
-  // 如果当前是加载页面,显示加载页面组件
   if (currentPage === "loading") {
     return (
       <ResponsiveWrapper>
@@ -309,7 +242,6 @@ export default function App() {
     );
   }
 
-  // 如果当前是绘图加载页面,显示绘图加载页面组件
   if (currentPage === "drawing") {
     return (
       <ResponsiveWrapper>
@@ -318,40 +250,39 @@ export default function App() {
     );
   }
 
-  // 如果当前是漫画结果页面,显示漫画结果页面组件
   if (currentPage === "result") {
     return (
       <>
         <ResponsiveWrapper>
           <ComicResultPage
+            comicTitle={comicTitle}
             comicPanelImages={generatedComicImages}
+            comicLayoutType={comicLayoutType}
             onRestart={() => {
-              // 重置所有状态，回到首页
               setStoryText("");
-              setSelectedStyle(null);
+              setSelectedStyle("japanese");
               setSelectedTopics(new Set());
               setUploadedImages([]);
               setGeneratedComicImages([]);
               setCurrentPage("home");
             }}
-            onShare={() => {
-              // 显示分享浮层
-              setIsShareOverlayOpen(true);
+            onShare={() => setIsShareOverlayOpen(true)}
+            onEdit={() => {
+              // 重新编辑：返回到生成剧本状态，恢复保存的剧本内容
+              setGeneratedPanels(savedPanelsForEdit);
+              setCurrentPage("script");
             }}
           />
         </ResponsiveWrapper>
-
-        {/* 分享浮层 - 提升到ResponsiveWrapper外部，确保在最上层 */}
-        <div
-          className="fixed inset-0 pointer-events-none"
-          style={{ zIndex: 9999 }}
-        >
+        <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 9999 }}>
           <ResponsiveWrapper>
             <div className="pointer-events-auto">
               <ShareOverlay
                 isOpen={isShareOverlayOpen}
                 onClose={() => setIsShareOverlayOpen(false)}
                 comicPanelImages={generatedComicImages}
+                comicTitle={comicTitle}
+                comicLayoutType={comicLayoutType}
               />
             </div>
           </ResponsiveWrapper>
@@ -360,586 +291,258 @@ export default function App() {
     );
   }
 
-  // 首页
+  // Home Page - 100% Figma Restoration
   return (
     <ResponsiveWrapper>
-      <div
-        className="bg-[rgba(0,0,0,0)] relative w-[750px] h-[1624px]"
-        data-name="Figma design - 首页1.png"
-      >
-        {/* Toast组件 */}
-        <CustomToast
-          message={toastMessage}
-          isVisible={isToastVisible}
-        />
+      <div className="bg-white relative w-[750px] min-h-[1624px]" data-name="Figma design - 首页1.png">
+        <CustomToast message={toastMessage} isVisible={isToastVisible} />
 
-        {/* Root */}
-        <div
-          className="absolute bg-[rgba(0,0,0,0)] h-[1621.622px] left-[-0.9px] right-[0.9px] top-[0.38px]"
-          data-name="Root"
-        >
-          {/* Background */}
-          <div
-            className="absolute h-[1624px] left-[calc(50%+0.35px)] top-[0.43px] translate-x-[-50%] w-[750px]"
-            data-name="bg"
-          >
-            <img
-              alt=""
-              className="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
-              src={imgBg}
+        {/* Background */}
+        <div className="absolute h-full left-0 top-0 w-[750px]" data-name="bg">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgBg} />
+        </div>
+
+        {/* Story Input Section */}
+        <div className="absolute bg-[rgba(0,0,0,0)] bottom-[710px] h-[614px] right-0 w-[750px]" data-name="Groups">
+          {/* Background Card */}
+          <div className="absolute h-[592px] left-0 top-[19px] w-[750px]" data-name="bg_neirong">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgBgNeirong} />
+          </div>
+
+          {/* Top Line */}
+          <div className="absolute h-[3px] left-[54px] top-[120px] w-[643px]" data-name="img_line_1">
+            <div className="absolute inset-[-51.47%_-0.19%_-44.99%_-0.19%]">
+              <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 645.5 5.89402">
+                <path d={svgPaths.p32e5d600} fill="var(--stroke-0, #4E4E4E)" id="img_line_1" />
+              </svg>
+            </div>
+          </div>
+
+          {/* Placeholder Text */}
+          {!storyText && (
+            <div className="absolute flex flex-col font-['PingFang_SC:Regular',sans-serif] h-[180px] justify-center leading-[0] left-[54px] not-italic opacity-40 text-[#222] text-[28px] top-[212.5px] translate-y-[-50%] w-[642px] pointer-events-none">
+              <p className="leading-[45px]">例如：大年三十，我回到老家，爷爷奶奶准备了一大桌年夜饭..或者写下你的新年愿望：希望心的一年能升职加薪，脱单成功...</p>
+            </div>
+          )}
+
+          {/* Text Input Area */}
+          <div className="absolute left-[54px] top-[144px] w-[642px] h-[180px] z-10">
+            <textarea
+              value={storyText}
+              onChange={(e) => {
+                const text = e.target.value;
+                if (text.length > 200) {
+                  showToast("最大字数不可超过200字");
+                  return;
+                }
+                setStoryText(text);
+              }}
+              placeholder=""
+              className="w-full h-full bg-transparent border-none outline-none text-[#222] text-[28px] resize-none leading-[45px] font-['PingFang_SC:Medium',sans-serif]"
+              style={{ fontWeight: 500 }}
             />
           </div>
 
-          {/* Groups - Main content */}
-          <div
-            className="absolute bg-[rgba(0,0,0,0)] bottom-[115.99px] h-[1505.631px] right-0 w-[750px]"
-            data-name="Groups"
-          >
-            {/* Groups1 - Bottom section with generate button */}
-            <div
-              className="absolute bg-[rgba(0,0,0,0)] bottom-0 h-[586.712px] right-0 w-[750px]"
-              data-name="Groups"
-            >
-              {/* Generate Button - Full clickable area */}
-              <div
-                className="absolute bottom-[10.14px] h-[91.216px] right-[31.53px] w-[686.937px]"
-                data-name="Image"
-              >
-                <motion.button
-                  className="absolute inset-0 cursor-pointer bg-transparent border-none outline-none"
-                  whileTap={{ scale: 0.92 }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 400,
-                    damping: 15,
-                  }}
-                  onClick={() => {
-                    // 验证是否填写了故事内容
-                    if (!storyText.trim()) {
-                      showToast("请输入故事内容");
-                      return;
-                    }
-                    console.log("Generate comic script with:", {
-                      selectedStyle,
-                      selectedTopics:
-                        Array.from(selectedTopics),
-                      storyText,
-                    });
-                    setCurrentPage("loading");
-                  }}
-                >
-                  <img
-                    alt=""
-                    className="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
-                    src={imgImage}
-                  />
+          {/* Title */}
+          <div className="absolute bottom-[535.07px] flex flex-col font-['PingFang_SC'] h-[43.919px] justify-center leading-[0] not-italic right-[695.59px] text-[#2c2c2c] text-[34px] translate-x-[100%] translate-y-[50%] w-[204.955px]" style={{ fontWeight: 700 }}>
+            <p className="leading-[normal]">写下你的故事</p>
+          </div>
 
-                  {/* 文字固定在按钮背景上 */}
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <p
-                      className="font-['PingFang_SC:Bold',sans-serif] text-[32px] text-white leading-normal whitespace-pre-wrap"
-                      style={{ fontWeight: 700 }}
-                    >
-                      生成漫画剧本
-                    </p>
-                  </div>
-                </motion.button>
-              </div>
-
-              {/* Groups2 - Style buttons container */}
-              <div
-                className="absolute bg-[rgba(0,0,0,0)] bottom-[144.2px] h-[349px] right-[47.65px] w-[663px]"
-                data-name="Groups"
-              >
-                {/* Frame3 - All buttons wrapper */}
-                <div className="absolute content-stretch flex flex-col gap-[6px] items-start left-[0.06px] top-[-0.04px] w-[651.892px]">
-                  {/* Frame - Row 1 */}
-                  <div className="content-stretch flex gap-[4px] items-center relative shrink-0">
-                    <StyleButton
-                      id="japanese"
-                      label="日式漫画"
-                      isSelected={selectedStyle === "japanese"}
-                      onClick={() =>
-                        setSelectedStyle("japanese")
-                      }
-                      characterImage="characters"
-                      characterConfig={{
-                        containerClass:
-                          "absolute left-[3.15px] size-[77.7px] top-[3.15px]",
-                        imgWrapperClass:
-                          "absolute h-[70.901px] left-[-2.91px] top-[-0.97px] w-[82.718px]",
-                        imgClass:
-                          "absolute h-[160.19%] max-w-none top-0 w-[1017.46%]",
-                        imgStyle: { left: "-0.79%", top: "0" },
-                      }}
-                      textLeft="82px"
-                      textTop="41.54px"
-                      width={210}
-                      isWide={false}
-                    />
-                    <StyleButton
-                      id="colorful"
-                      label="彩色动漫"
-                      isSelected={selectedStyle === "colorful"}
-                      onClick={() =>
-                        setSelectedStyle("colorful")
-                      }
-                      characterImage="colorful"
-                      characterConfig={{
-                        containerClass:
-                          "absolute left-[10px] size-[77.77px] top-0",
-                        imgWrapperClass:
-                          "absolute h-[65.558px] left-[1.04px] top-[6.12px] w-[76.163px]",
-                        imgClass:
-                          "absolute h-[115.74%] max-w-none top-0 w-full",
-                        imgStyle: { left: "0", top: "0" },
-                      }}
-                      textLeft="88.94px"
-                      textTop="calc(50%-0.46px)"
-                      width={210}
-                      isWide={false}
-                    />
-                    <StyleButton
-                      id="ghibli"
-                      label="吉卜力风格"
-                      isSelected={selectedStyle === "ghibli"}
-                      onClick={() => setSelectedStyle("ghibli")}
-                      characterImage="characters"
-                      characterConfig={{
-                        containerClass:
-                          "absolute left-[10.06px] size-[77.77px] top-[-0.04px]",
-                        imgWrapperClass:
-                          "absolute h-[69.415px] left-[-3.48px] top-[-1.62px] w-[85.483px]",
-                        imgClass:
-                          "absolute h-[160.19%] max-w-none top-0 w-[963.91%]",
-                        imgStyle: {
-                          left: "-189.47%",
-                          top: "0",
-                        },
-                      }}
-                      textLeft="81px"
-                      textTop="calc(50%-0.46px)"
-                      width={226}
-                      isWide={true}
-                    />
-                  </div>
-
-                  {/* Frame1 - Row 2 */}
-                  <div className="content-stretch flex gap-[4px] items-center relative shrink-0">
-                    <StyleButton
-                      id="shinkai"
-                      label="新海诚风格"
-                      isSelected={selectedStyle === "shinkai"}
-                      onClick={() =>
-                        setSelectedStyle("shinkai")
-                      }
-                      characterImage="characters"
-                      characterConfig={{
-                        containerClass:
-                          "absolute left-[10.06px] size-[77.77px] top-[-0.04px]",
-                        imgWrapperClass:
-                          "absolute h-[69.415px] left-[-1.94px] top-[0.97px] w-[80.984px]",
-                        imgClass:
-                          "absolute h-[160.19%] left-[-305.56%] max-w-none top-0 w-[1017.46%]",
-                        imgStyle: {
-                          left: "-305.56%",
-                          top: "0",
-                        },
-                      }}
-                      textLeft="80px"
-                      width={226}
-                      isWide={true}
-                    />
-                    <StyleButton
-                      id="qversion"
-                      label="Q版可爱"
-                      isSelected={selectedStyle === "qversion"}
-                      onClick={() =>
-                        setSelectedStyle("qversion")
-                      }
-                      characterImage="q"
-                      characterConfig={{
-                        containerClass:
-                          "absolute left-[10px] size-[77.77px] top-0",
-                        imgWrapperClass:
-                          "absolute h-[66.104px] left-[-0.97px] top-[4.86px] w-[79.714px]",
-                        imgClass:
-                          "absolute h-[120.63%] max-w-none w-[100.03%]",
-                        imgStyle: {
-                          left: "-0.6%",
-                          top: "0.46%",
-                        },
-                      }}
-                      textLeft="88.94px"
-                      textTop="calc(50%-0.46px)"
-                      width={210}
-                      isWide={false}
-                    />
-                    <StyleButton
-                      id="shonen"
-                      label="热血少年漫"
-                      isSelected={selectedStyle === "shonen"}
-                      onClick={() => setSelectedStyle("shonen")}
-                      characterImage="characters"
-                      characterConfig={{
-                        containerClass:
-                          "absolute left-[-0.06px] size-[77.77px] top-[-0.04px]",
-                        imgWrapperClass:
-                          "absolute h-[69.415px] left-[-1.94px] top-[2.92px] w-[85.804px]",
-                        imgClass:
-                          "absolute h-[160.19%] max-w-none top-0 w-[960.3%]",
-                        imgStyle: {
-                          left: "-475.66%",
-                          top: "0",
-                        },
-                      }}
-                      textLeft="81px"
-                      textTop="calc(50%-0.46px)"
-                      width={226}
-                      isWide={true}
-                    />
-                  </div>
-
-                  {/* Frame2 - Row 3 */}
-                  <div className="content-stretch flex gap-[4px] items-center relative shrink-0">
-                    <StyleButton
-                      id="hongkong"
-                      label="港漫风格"
-                      isSelected={selectedStyle === "hongkong"}
-                      onClick={() =>
-                        setSelectedStyle("hongkong")
-                      }
-                      characterImage="characters"
-                      characterConfig={{
-                        containerClass:
-                          "absolute left-[10px] size-[77.77px] top-0",
-                        imgWrapperClass:
-                          "absolute h-[69.415px] left-0 top-[2.92px] w-[81.305px]",
-                        imgClass:
-                          "absolute h-[160.19%] max-w-none top-0 w-[1013.44%]",
-                        imgStyle: {
-                          left: "-607.51%",
-                          top: "0",
-                        },
-                      }}
-                      textLeft="85.94px"
-                      textTop="calc(50%-0.46px)"
-                      width={210}
-                      isWide={false}
-                    />
-                    <StyleButton
-                      id="american"
-                      label="美式漫画"
-                      isSelected={selectedStyle === "american"}
-                      onClick={() =>
-                        setSelectedStyle("american")
-                      }
-                      characterImage="characters"
-                      characterConfig={{
-                        containerClass:
-                          "absolute left-[12px] size-[77.77px] top-0",
-                        imgWrapperClass:
-                          "absolute h-[69.415px] left-[1.94px] top-[0.97px] w-[76.806px]",
-                        imgClass:
-                          "absolute h-[160.19%] max-w-none top-0 w-[1072.8%]",
-                        imgStyle: {
-                          left: "-754.81%",
-                          top: "0",
-                        },
-                      }}
-                      textLeft="85.94px"
-                      textTop="calc(50%-0.46px)"
-                      width={210}
-                      isWide={false}
-                    />
-                    <StyleButton
-                      id="watercolor"
-                      label="水彩插画"
-                      isSelected={
-                        selectedStyle === "watercolor"
-                      }
-                      onClick={() =>
-                        setSelectedStyle("watercolor")
-                      }
-                      characterImage="characters"
-                      characterConfig={{
-                        containerClass:
-                          "absolute left-[10px] size-[77.77px] top-0",
-                        imgWrapperClass:
-                          "absolute h-[69.415px] left-[0.97px] top-[2.92px] w-[77.449px]",
-                        imgClass:
-                          "absolute h-[160.19%] max-w-none top-0 w-[1063.9%]",
-                        imgStyle: {
-                          left: "-853.11%",
-                          top: "0",
-                        },
-                      }}
-                      textLeft="84.94px"
-                      textTop="calc(50%-0.46px)"
-                      width={210}
-                      isWide={false}
-                    />
-                  </div>
-
-                  {/* Button9 - Row 4 */}
-                  <div className="content-stretch flex items-center relative shrink-0">
-                    <StyleButton
-                      id="sketch"
-                      label="铅笔素描"
-                      isSelected={selectedStyle === "sketch"}
-                      onClick={() => setSelectedStyle("sketch")}
-                      characterImage="characters"
-                      characterConfig={{
-                        containerClass:
-                          "absolute left-[8.53px] size-[77px] top-[-1.47px]",
-                        imgWrapperClass:
-                          "absolute h-[68.727px] left-[5.19px] top-[2.24px] w-[67.455px]",
-                        imgClass:
-                          "absolute h-[160.19%] max-w-none top-0 w-[1209.43%]",
-                        imgStyle: {
-                          left: "-1098.11%",
-                          top: "0",
-                        },
-                      }}
-                      textLeft="81.94px"
-                      textTop="calc(50%-0.46px)"
-                      width={210}
-                      isWide={false}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Style selection title */}
-              <div
-                className="absolute bottom-[533.22px] flex flex-col font-['PingFang_SC:Bold',sans-serif] h-[43.919px] justify-center leading-[0] not-italic right-[690.31px] text-[#443831] text-[32.658px] translate-x-[100%] translate-y-[50%] w-[201.577px]"
-                style={{ fontWeight: 800 }}
-              >
-                <p
-                  className="leading-[normal] whitespace-nowrap"
-                  style={{ fontWeight: 800 }}
-                >
-                  选择漫画风格
-                </p>
-              </div>
-            </div>
-
-            {/* Groups3 - Story input section */}
-            <div
-              className="absolute bg-[rgba(0,0,0,0)] bottom-[593.47px] h-[552.928px] right-[21.4px] w-[692.568px]"
-              data-name="Groups"
-            >
-              {/* Input box background */}
-              <div
-                className="absolute bottom-[-5.63px] h-[568.694px] right-[11.26px] w-[686.937px] z-0"
-                data-name="Image"
-              >
-                <img
-                  alt=""
-                  className="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
-                  src={imgImage5}
-                />
-              </div>
-
-              {/* 话题灵感滚动容器 - 调整left定位以避免遮挡标题 */}
-              <div className="absolute bottom-[24px] left-[167.31px] right-[auto] w-[458px] h-[60px] z-10">
-                <TopicInspirationModule
-                  topics={topicItems}
-                  selectedTopics={Array.from(selectedTopics)}
-                  onTopicClick={toggleTopic}
-                  topicRotations={topicRotations}
-                />
-              </div>
-
-              {/* Decorative images */}
-              <div
-                className="absolute bottom-[42.79px] h-[23.649px] right-[652.03px] w-[13.514px] z-20"
-                data-name="Image"
-              >
-                <img
-                  alt=""
-                  className="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
-                  src={imgImage6}
-                />
-              </div>
-              <div
-                className="absolute bottom-[427.93px] h-[21.396px] right-[72.58px] w-[584.459px] z-20"
-                data-name="Image"
-              >
-                <img
-                  alt=""
-                  className="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
-                  src={imgImage8}
-                />
-              </div>
-              <div
-                className="absolute bottom-[472.97px] h-[25.901px] right-[610.36px] w-[32.658px] z-20"
-                data-name="Image"
-              >
-                <img
-                  alt=""
-                  className="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
-                  src={imgImage9}
-                />
-              </div>
-
-              {/* Text labels */}
-              <div className="absolute bottom-[54.05px] flex flex-col font-['PingFang_SC:Medium',sans-serif] h-[29.279px] justify-center leading-[0] not-italic right-[647.52px] text-[#3d3a2c] text-[23.649px] translate-x-[100%] translate-y-[50%] w-[103.604px]">
-                <p className="leading-[normal] whitespace-pre-wrap">
-                  话题灵感:
-                </p>
-              </div>
-
-              {/* Image upload module - 上传区域 */}
-              <div className="absolute bottom-[128px] right-[72.52px] w-[575.45px] h-[102.477px] z-10">
-                <div className="flex gap-[12px] items-center">
-                  <AnimatePresence mode="popLayout">
-                    {uploadedImages.map((image, index) => (
-                      <motion.div
-                        key={index}
-                        initial={
-                          isReturningFromOtherPage
-                            ? false
-                            : { scale: 0, opacity: 0 }
-                        }
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0, opacity: 0 }}
-                        transition={{
-                          type: "spring",
-                          stiffness: 300,
-                          damping: 25,
-                        }}
-                        className="relative w-[111.486px] h-[102.477px] rounded-[4px] overflow-hidden bg-white"
-                      >
-                        <img
-                          src={image}
-                          alt={`上传的图片 ${index + 1}`}
-                          className="w-full h-full object-cover"
-                        />
-                        <motion.button
-                          className="absolute top-[4px] right-[4px] w-[20px] h-[20px] bg-black/60 rounded-full flex items-center justify-center"
-                          onClick={() => removeImage(index)}
-                          whileTap={{ scale: 0.9 }}
-                        >
-                          <span className="text-white text-[14px] leading-none">
-                            ×
-                          </span>
-                        </motion.button>
-                      </motion.div>
-                    ))}
-                  </AnimatePresence>
-
-                  {uploadedImages.length < 4 && (
-                    <motion.label
-                      initial={
-                        isReturningFromOtherPage
-                          ? false
-                          : { scale: 0, opacity: 0 }
-                      }
-                      animate={{ scale: 1, opacity: 1 }}
-                      whileTap={{ scale: 0.95 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 20,
-                      }}
-                      className="relative w-[111.486px] h-[102.477px] cursor-pointer flex flex-col items-center justify-center"
-                    >
-                      {/* 使用Figma设计的虚线框背景 */}
-                      <div className="absolute inset-0">
-                        <img
-                          alt=""
-                          className="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
-                          src={imgImage7}
-                        />
-                      </div>
-
-                      {/* "参考图"文案固定在上传按钮上，向下移动40px，向左移动3px */}
-                      <div
-                        className="relative flex flex-col font-['PingFang_SC:Medium',sans-serif] justify-center leading-[0] not-italic text-[#3d3d3d] text-[22px] pointer-events-none translate-y-[40px] translate-x-[-3px]"
-                        style={{ fontWeight: 500 }}
-                      >
-                        <p
-                          className="leading-[normal] whitespace-pre-wrap"
-                          style={{ fontWeight: 500 }}
-                        >
-                          参考图
-                        </p>
-                      </div>
-
-                      <input
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        onChange={handleImageUpload}
-                        className="hidden"
-                      />
-                    </motion.label>
-                  )}
-                </div>
-              </div>
-
-              {/* Text input area */}
-              <div className="absolute bottom-[286.28px] right-[72.52px] w-[575.45px] h-[136.261px]">
-                <textarea
-                  value={storyText}
-                  onChange={(e) => setStoryText(e.target.value)}
-                  placeholder={placeholder}
-                  className="w-full h-full bg-transparent border-none outline-none font-['PingFang_SC:Bold',sans-serif] text-[#2c2c2c] text-[26px] resize-none leading-[44px]"
-                  style={{ fontWeight: 700 }}
-                />
-              </div>
-
-              {/* Story title */}
-              <div
-                className="absolute bottom-[484.8px] flex flex-col font-['PingFang_SC:Bold',sans-serif] h-[43.919px] justify-center leading-[0] not-italic right-[596.85px] text-[#2c2c2c] text-[32px] translate-x-[100%] translate-y-[50%] w-[204.955px]"
-                style={{ fontWeight: 800 }}
-              >
-                <p
-                  className="leading-[normal] whitespace-nowrap"
-                  style={{ fontWeight: 800 }}
-                >
-                  写下你的故事
-                </p>
-              </div>
-            </div>
-
-            {/* Tuanzi character */}
-            <div
-              className="absolute bottom-[1064.19px] h-[96.847px] right-[78.83px] w-[152.027px]"
-              data-name="img_tuanzi"
-            >
-              <img
-                alt=""
-                className="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
-                src={imgImgTuanzi}
-              />
+          {/* Bottom Dotted Line */}
+          <div className="absolute h-0 left-[54px] top-[488px] w-[645px]">
+            <div className="absolute inset-[-0.5px_0]">
+              <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 645 1">
+                <path d="M0 0.5H645" id="Line 3" stroke="var(--stroke-0, black)" strokeDasharray="5 5" strokeOpacity="0.5" />
+              </svg>
             </div>
           </div>
 
-          {/* Side border */}
-          <div
-            className="absolute bottom-0 h-[1621.622px] right-0 w-[1.126px]"
-            data-name="Image"
-          >
-            <img
-              alt=""
-              className="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
-              src={imgImage12}
+          {/* Topic Label */}
+          <div className="absolute content-stretch flex gap-[5px] items-center left-[54px] top-[523px] w-[122px]">
+            <div className="h-[23.649px] relative shrink-0 w-[13.514px]" data-name="dengpao">
+              <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgDengpao} />
+            </div>
+            <div className="flex flex-col font-['PingFang_SC:Medium',sans-serif] justify-center leading-[0] not-italic relative shrink-0 text-[#3d3a2c] text-[24px]">
+              <p className="leading-[normal]">话题灵感:</p>
+            </div>
+          </div>
+
+          {/* Topic Buttons - Scrollable Container */}
+          <div className="absolute left-[196px] top-[514px] w-[494px] h-[66px]">
+            <div className="relative w-full h-full">
+              {/* Scrollable content */}
+              <div className="w-full h-full overflow-x-auto overflow-y-hidden" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                <style>{`
+                  .topic-scroll-container::-webkit-scrollbar {
+                    display: none;
+                  }
+                `}</style>
+                <div className="flex gap-[8px] items-center topic-scroll-container">
+                  {topicItems.map((topic) => {
+                    const isSelected = selectedTopics.has(topic.id);
+                    const rotation = topicRotations[topic.id as keyof typeof topicRotations] || 0;
+
+                    return (
+                      <motion.button
+                        key={topic.id}
+                        onClick={() => toggleTopic(topic.id)}
+                        className="bg-[#f0f0f0] content-stretch flex gap-[4px] h-[51px] items-center py-[2px] relative rounded-[16px] shrink-0"
+                        style={{
+                          paddingLeft: topic.type === 'hot' ? '8px' : '16px',
+                          paddingRight: '12px'
+                        }}
+                        whileTap={{ scale: 0.9 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                      >
+                        {topic.type === 'normal' && (
+                          <div aria-hidden="true" className="absolute border-[#fdf9e7] border-[1.126px] border-solid inset-0 pointer-events-none rounded-[16px]" />
+                        )}
+                        {topic.type === 'hot' && (
+                          <div className="relative shrink-0 size-[26px]">
+                            <div className={topic.id === 'chunjie' ? "absolute h-[22.523px] left-[23.08%] right-[16.29%] top-[2px]" : "absolute inset-[7.69%_2.59%_5.68%_2.12%]"}>
+                              <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={topic.icon} />
+                            </div>
+                          </div>
+                        )}
+                        <div className="content-stretch flex gap-[4px] items-center relative shrink-0">
+                          <div
+                            className={`flex flex-col font-['PingFang_SC:${topic.fontFamily || 'Medium'}',sans-serif] justify-center leading-[0] not-italic relative shrink-0 text-black whitespace-nowrap`}
+                            style={{ fontSize: topic.fontSize || '24px' }}
+                          >
+                            <p className="leading-[normal] whitespace-pre">{topic.text}</p>
+                          </div>
+                          <motion.div
+                            className="relative shrink-0 size-[24px]"
+                            animate={{ rotate: rotation }}
+                            transition={{ duration: 0.6, ease: "easeInOut" }}
+                          >
+                            <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 24 24">
+                              <g opacity="0.3">
+                                <path clipRule="evenodd" d={svgPaths.p43c2c00} fill="#222222" fillRule="evenodd" />
+                              </g>
+                            </svg>
+                          </motion.div>
+                        </div>
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              </div>
+              
+              {/* Gradient Mask - positioned at right edge */}
+              <div className="absolute right-0 top-0 h-full w-[60px] bg-gradient-to-l from-white to-transparent pointer-events-none z-10" />
+            </div>
+          </div>
+
+          {/* Upload Reference Image Button */}
+          <div className="absolute h-[112.362px] left-[54px] top-[353px] w-[575px] z-10">
+            <div className="flex gap-[24px] items-center">
+              <AnimatePresence mode="popLayout">
+                {uploadedImages.map((image, index) => (
+                  <motion.div
+                    key={index}
+                    initial={isReturningFromOtherPage ? false : { scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                    className="relative w-[111.486px] h-[102.477px] rounded-[4px] overflow-hidden bg-white"
+                  >
+                    <img src={image} alt={`上传的图片 ${index + 1}`} className="w-full h-full object-cover" />
+                    <motion.button
+                      className="absolute top-[4px] right-[4px] w-[32px] h-[32px] bg-black/60 rounded-full flex items-center justify-center"
+                      onClick={() => removeImage(index)}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <span className="text-white text-[24px] leading-none flex items-center justify-center h-full">×</span>
+                    </motion.button>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+
+              {uploadedImages.length < 4 && (
+                <motion.label
+                  initial={isReturningFromOtherPage ? false : { scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className="relative h-[112.362px] w-[111.486px] cursor-pointer"
+                >
+                  <div className="absolute bottom-[9.88px] h-[102.477px] right-0 w-[111.486px]">
+                    <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgShangchuan1} />
+                  </div>
+                  <div className="absolute bottom-[15.77px] flex flex-col font-['PingFang_SC:Medium',sans-serif] h-[31.532px] justify-center leading-[0] not-italic right-[88.97px] text-[#3d3d3d] text-[22px] translate-x-[100%] translate-y-[50%] w-[81.081px] pointer-events-none">
+                    <p className="leading-[normal]">参考图</p>
+                  </div>
+                  <input type="file" accept="image/*" multiple onChange={handleImageUpload} className="hidden" />
+                </motion.label>
+              )}
+            </div>
+          </div>
+
+          {/* Tuanzi Decoration */}
+          <div className="absolute h-[150px] left-[468px] top-[-30px] w-[210px]" data-name="img_tuanzi2">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgImgTuanzi2} />
+          </div>
+        </div>
+
+        {/* Style Selection Section */}
+        <div className="absolute content-stretch flex flex-col gap-[3px] items-center left-0 top-[942px] w-[750px]" data-name="Groups">
+          {/* Title */}
+          <div className="h-[60px] relative shrink-0 w-full" data-name="标题">
+            <div className="flex flex-row items-center size-full">
+              <div className="content-stretch flex items-center px-[40px] relative size-full">
+                <div className="flex flex-col font-['PingFang_SC'] justify-center leading-[0] not-italic relative shrink-0 text-[#443831] text-[34px]" style={{ fontWeight: 700 }}>
+                  <p className="leading-[normal]">选择漫画风格</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Style Buttons Container */}
+          <div className="content-stretch flex flex-col gap-[8px] items-start px-[24px] relative shrink-0 w-full">
+            <ComicStyleSelection
+              selectedStyle={selectedStyle}
+              onStyleSelect={setSelectedStyle}
             />
           </div>
         </div>
 
-        {/* Groups5 - Top section (logo and title) */}
-        <div
-          className="absolute bg-[rgba(0,0,0,0)] bottom-[1273.4px] h-[350.225px] right-[0.9px] w-[750px]"
-          data-name="Groups"
-        >
-          {/* 春节光点粒子效果 */}
-          <GuangDianLiZi width={750} height={350} />
+        {/* Generate Button */}
+        <div className="absolute bottom-[2px] content-stretch flex items-start justify-center left-[-1px] overflow-clip pb-[90px] pt-[20px] w-[750px]">
+          <motion.button
+            className="content-stretch flex h-[90px] items-center justify-center px-[246px] py-[23px] relative shrink-0 w-[687px] cursor-pointer"
+            whileTap={{ scale: 0.92 }}
+            transition={{ type: "spring", stiffness: 400, damping: 15 }}
+            onClick={() => {
+              if (!storyText.trim() && uploadedImages.length === 0) {
+                showToast("请输入故事内容");
+                return;
+              }
+              setCurrentPage("loading");
+            }}
+          >
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              <img alt="" className="absolute h-[102.03%] left-[-0.07%] max-w-none top-[-0.46%] w-full" src={imgButton} />
+            </div>
+            <div className="flex flex-col font-['PingFang_SC:Medium',sans-serif] justify-center leading-[0] not-italic relative shrink-0 text-[32px] text-white">
+              <p className="leading-[normal]">生成漫画剧本</p>
+            </div>
+          </motion.button>
+        </div>
 
-          {/* 顶部Logo和装饰 - 使用TopHeader组件 */}
-          <TopHeader />
+        {/* Bottom Logo */}
+        <div className="absolute h-[38px] left-[313.66px] top-[1562.18px] w-[123px]" data-name="logo">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgLogo} />
+        </div>
+
+        {/* Top Title Image */}
+        <div className="absolute h-[147px] left-0 top-[153px] w-[750px]" data-name="Groups 1">
+          {/* 烟花粒子效果 - 覆盖顶部区域 */}
+          <div className="absolute left-0 top-[-153px] w-[750px] h-[300px]" style={{ zIndex: 1 }}>
+            <GuangDianLiZi width={750} height={300} />
+          </div>
+          
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgGroups1} style={{ zIndex: 2, position: 'relative' }} />
         </div>
       </div>
     </ResponsiveWrapper>

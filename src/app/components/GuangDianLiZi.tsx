@@ -28,11 +28,12 @@ class Vec2 {
 
 // 浅黄色系烟花粒子颜色
 const COLORS = [
-  'rgba(255, 248, 220, 1)', // 浅黄色
-  'rgba(255, 250, 205, 1)', // 柠檬绸
-  'rgba(255, 239, 153, 1)', // 淡金色
-  'rgba(255, 245, 180, 1)', // 浅金色
-  'rgba(250, 250, 210, 1)', // 亮黄色
+  'rgba(255, 248, 220, 1)',   // 浅黄色
+  'rgba(255, 250, 205, 1)',   // 柠檬绸
+  'rgba(255, 239, 153, 1)',   // 淡金色
+  'rgba(255, 245, 180, 1)',   // 浅金黄
+  'rgba(250, 250, 210, 1)',   // 亮黄色
+  'rgba(255, 255, 224, 1)',   // 浅黄白
 ];
 
 // 烟花粒子
@@ -86,13 +87,43 @@ class FireworkParticle {
     ctx.save();
     ctx.globalAlpha = this.alpha;
 
-    // 绘制发光粒子
+    // 绘制最外层大光晕（外发光效果）
+    const outerGlow = ctx.createRadialGradient(
+      this.position.x, this.position.y, 0,
+      this.position.x, this.position.y, this.size * 5
+    );
+    outerGlow.addColorStop(0, this.color.replace('1)', '0.4)'));
+    outerGlow.addColorStop(0.3, this.color.replace('1)', '0.2)'));
+    outerGlow.addColorStop(0.6, this.color.replace('1)', '0.1)'));
+    outerGlow.addColorStop(1, this.color.replace('1)', '0)'));
+
+    ctx.fillStyle = outerGlow;
+    ctx.beginPath();
+    ctx.arc(this.position.x, this.position.y, this.size * 5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 绘制中层发光光晕
+    const midGlow = ctx.createRadialGradient(
+      this.position.x, this.position.y, 0,
+      this.position.x, this.position.y, this.size * 3
+    );
+    midGlow.addColorStop(0, this.color);
+    midGlow.addColorStop(0.4, this.color.replace('1)', '0.6)'));
+    midGlow.addColorStop(0.8, this.color.replace('1)', '0.3)'));
+    midGlow.addColorStop(1, this.color.replace('1)', '0)'));
+
+    ctx.fillStyle = midGlow;
+    ctx.beginPath();
+    ctx.arc(this.position.x, this.position.y, this.size * 3, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 绘制内层光晕
     const gradient = ctx.createRadialGradient(
       this.position.x, this.position.y, 0,
       this.position.x, this.position.y, this.size * 2
     );
     gradient.addColorStop(0, this.color);
-    gradient.addColorStop(0.5, this.color.replace('1)', '0.5)'));
+    gradient.addColorStop(0.5, this.color.replace('1)', '0.7)'));
     gradient.addColorStop(1, this.color.replace('1)', '0)'));
 
     ctx.fillStyle = gradient;
@@ -100,12 +131,18 @@ class FireworkParticle {
     ctx.arc(this.position.x, this.position.y, this.size * 2, 0, Math.PI * 2);
     ctx.fill();
 
-    // 核心光点
-    ctx.shadowBlur = 8;
+    // 核心光点（增强外发光）
+    ctx.shadowBlur = 15;
     ctx.shadowColor = this.color;
     ctx.fillStyle = this.color;
     ctx.beginPath();
     ctx.arc(this.position.x, this.position.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 再次绘制核心以加强光亮感
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    ctx.arc(this.position.x, this.position.y, this.size * 0.6, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.restore();
@@ -163,20 +200,35 @@ class Rocket {
 
     ctx.save();
     
-    // 绘制拖尾（彗星效果）
+    // 绘制拖尾（彗星效果）- 增强外发光
     for (let i = 0; i < this.trail.length; i++) {
       const pos = this.trail[i];
       const alpha = (i + 1) / this.trail.length; // 越靠前透明度越低
       const size = 2 * alpha; // 越靠前越小
       
-      ctx.globalAlpha = alpha * 0.6;
+      ctx.globalAlpha = alpha * 0.7;
       
-      // 拖尾光晕
+      // 外层拖尾光晕（增强发光）
+      const outerTrail = ctx.createRadialGradient(
+        pos.x, pos.y, 0,
+        pos.x, pos.y, size * 4
+      );
+      outerTrail.addColorStop(0, this.color.replace('1)', '0.5)'));
+      outerTrail.addColorStop(0.5, this.color.replace('1)', '0.2)'));
+      outerTrail.addColorStop(1, this.color.replace('1)', '0)'));
+      
+      ctx.fillStyle = outerTrail;
+      ctx.beginPath();
+      ctx.arc(pos.x, pos.y, size * 4, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // 内层拖尾光晕
       const gradient = ctx.createRadialGradient(
         pos.x, pos.y, 0,
         pos.x, pos.y, size * 2
       );
       gradient.addColorStop(0, this.color);
+      gradient.addColorStop(0.6, this.color.replace('1)', '0.4)'));
       gradient.addColorStop(1, this.color.replace('1)', '0)'));
       
       ctx.fillStyle = gradient;
@@ -185,13 +237,29 @@ class Rocket {
       ctx.fill();
     }
     
-    // 绘制主光点
+    // 绘制主光点（增强发光）
     ctx.globalAlpha = 1;
-    ctx.shadowBlur = 8;
+    
+    // 外发光
+    const outerGlow = ctx.createRadialGradient(
+      this.position.x, this.position.y, 0,
+      this.position.x, this.position.y, 8
+    );
+    outerGlow.addColorStop(0, this.color);
+    outerGlow.addColorStop(0.5, this.color.replace('1)', '0.5)'));
+    outerGlow.addColorStop(1, this.color.replace('1)', '0)'));
+    
+    ctx.fillStyle = outerGlow;
+    ctx.beginPath();
+    ctx.arc(this.position.x, this.position.y, 8, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // 核心光点
+    ctx.shadowBlur = 12;
     ctx.shadowColor = this.color;
     ctx.fillStyle = this.color;
     ctx.beginPath();
-    ctx.arc(this.position.x, this.position.y, 2, 0, Math.PI * 2);
+    ctx.arc(this.position.x, this.position.y, 2.5, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.restore();

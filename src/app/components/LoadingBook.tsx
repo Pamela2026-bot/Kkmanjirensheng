@@ -24,7 +24,7 @@ export default function LoadingBook({ text }: LoadingBookProps) {
   return (
     <>
       {/* Loading text with animation - 居中对齐 */}
-      <p className="absolute font-['PingFang_SC:Bold',sans-serif] leading-[normal] left-[50%] translate-x-[-50%] not-italic text-[32px] text-black top-[812.62px] whitespace-pre text-center" style={{ fontWeight: 700 }}>
+      <p className="absolute font-['PingFang_SC:Regular',sans-serif] leading-[normal] left-[50%] translate-x-[-50%] not-italic text-[32px] text-black top-[812.62px] whitespace-pre text-center">
         {textWithoutDots}{dots}
       </p>
 

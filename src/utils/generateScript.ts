@@ -6,35 +6,90 @@ export interface PanelData {
   dialogue: string;
 }
 
-export function generateScript(story: string, style?: string | null, topics?: Set<string>): PanelData[] {
+export interface ScriptResult {
+  title: string; // 漫画标题：快看！xxxx
+  panels: PanelData[]; // 四格分镜数据
+}
+
+// 生成漫画标题
+function generateTitle(story: string, topics?: Set<string>): string {
+  // 根据话题生成标题
+  if (topics && topics.size > 0) {
+    const topicTitles: Record<string, string> = {
+      mogui: '快看！我的魔鬼亲戚',
+      chunjie: '快看！我的春节名场面',
+      shenxian: '快看！我遇到了神仙',
+      suliao: '快看！我的塑料友情',
+      youdu: '快看！我的有毒父母',
+      laoshi: '快看！我的老师',
+    };
+    
+    // 优先使用第一个选中的话题
+    const firstTopic = Array.from(topics)[0];
+    if (firstTopic && topicTitles[firstTopic]) {
+      return topicTitles[firstTopic];
+    }
+  }
+  
+  // 从故事内容中提取关键词生成标题
+  const keywordTitles: Array<{ keywords: string[], title: string }> = [
+    { keywords: ['亲戚', '魔鬼', '大姨', '大姑'], title: '快看！我的奇葩亲戚' },
+    { keywords: ['春节', '过年', '年夜饭', '除夕', '大年'], title: '快看！我的春节故事' },
+    { keywords: ['神仙', '仙人', '法力', '神话'], title: '快看！我遇见了神仙' },
+    { keywords: ['朋友', '闺蜜', '兄弟', '塑料'], title: '快看！我的朋友圈' },
+    { keywords: ['父母', '妈妈', '爸爸', '家长'], title: '快看！我的家庭故事' },
+    { keywords: ['老师', '学校', '班主任'], title: '快看！我和老师的故事' },
+    { keywords: ['爱情', '恋爱', '对象', '喜欢'], title: '快看！我的爱情故事' },
+    { keywords: ['工作', '职场', '老板', '同事'], title: '快看！我的职场日常' },
+    { keywords: ['猫', '狗', '宠物'], title: '快看！我和宠物的故事' },
+    { keywords: ['梦', '梦见', '梦想'], title: '快看！我的奇妙梦境' },
+  ];
+  
+  for (const item of keywordTitles) {
+    if (item.keywords.some(kw => story.includes(kw))) {
+      return item.title;
+    }
+  }
+  
+  // 兜底文案
+  return '快看！漫画我的故事';
+}
+
+export function generateScript(story: string, style?: string | null, topics?: Set<string>): ScriptResult {
+  // 生成标题
+  const title = generateTitle(story, topics);
+  
   // 如果没有输入故事，返回默认示例
   if (!story || story.trim() === '') {
-    return [
-      {
-        title: 'PANEL1 画面描述',
-        description: '主角走在阳光明媚的街道上，突然发现脚下有一只发光的猫咪。',
-        dialogue: "主角：'咦？这是什么？'"
-      },
-      {
-        title: 'PANEL2 画面描述',
-        description: '猫咪突然变成了一个巨大的机甲战士，路人惊恐万分。',
-        dialogue: "路人：'啊啊啊！怪兽！'"
-      },
-      {
-        title: 'PANEL3 画面描述',
-        description: '主角不仅没有害怕，反而兴奋地拿出了逗猫棒。',
-        dialogue: "主角：'乖，来玩呀！'"
-      },
-      {
-        title: 'PANEL4 画面描述',
-        description: '机甲战士脸红了，乖乖坐下被主角摸头。',
-        dialogue: "机甲猫：'喵..（害羞）'"
-      }
-    ];
+    return {
+      title: '快看！漫画我的故事',
+      panels: [
+        {
+          title: 'PANEL1 画面描述',
+          description: '主角走在阳光明媚的街道上，突然发现脚下有一只发光的猫咪。',
+          dialogue: "主角：'咦？这是什么？'"
+        },
+        {
+          title: 'PANEL2 画面描述',
+          description: '猫咪突然变成了一个巨大的机甲战士，路人惊恐万分。',
+          dialogue: "路人：'啊啊啊！怪兽！'"
+        },
+        {
+          title: 'PANEL3 画面描述',
+          description: '主角不仅没有害怕，反而兴奋地拿出了逗猫棒。',
+          dialogue: "主角：'乖，来玩呀！'"
+        },
+        {
+          title: 'PANEL4 画面描述',
+          description: '机甲战士脸红了,乖乖坐下被主角摸头。',
+          dialogue: "机甲猫：'喵..（害羞）'"
+        }
+      ]
+    };
   }
 
   // 分析故事内容，生成四格分镜
-  const sentences = story.split(/[。！？\n]/).filter(s => s.trim().length > 0);
+  const sentences = story.split(/[。！？\\n]/).filter(s => s.trim().length > 0);
   const panels: PanelData[] = [];
 
   // 根据故事长度决定分镜策略
@@ -72,7 +127,7 @@ export function generateScript(story: string, style?: string | null, topics?: Se
     panels.push(createPanel(4, `${mainSentence}的结局`, story, topics));
   }
 
-  return panels;
+  return { title, panels };
 }
 
 function createPanel(panelNum: number, sentence: string, fullStory: string, topics?: Set<string>): PanelData {

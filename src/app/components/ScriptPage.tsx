@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
 import ButtoGroups from '@/imports/ButtoGroups';
-import TopHeader from '@/app/components/TopHeader';
 import GuangDianLiZi from '@/app/components/GuangDianLiZi';
 import ScriptEditor from '@/app/components/ScriptEditor';
 import type { PanelData } from '@/utils/generateScript';
-import imgBg from "figma:asset/5a0ac0a879b18c754e27b297ce3c5de07caee829.png";
+import imgBg from "figma:asset/a414cc1cab9532be936d7017bf7b90b9478bb82f.png";
 import imgImage13 from "figma:asset/43192f93114af8b9a5406264c1649eef98b2df77.png";
+import imgLogo from "figma:asset/c301e171aed62395c79f7ef941923a62626a0795.png";
 
 interface ScriptPageProps {
   initialPanels?: PanelData[];
@@ -48,34 +48,30 @@ export default function ScriptPage({ initialPanels = [], onStartDrawing, onBack 
     <div className="bg-[rgba(0,0,0,0)] relative w-[750px] h-[1624px]" data-name="Figma design - 生成剧本.png">
       {/* Root */}
       <div className="absolute bg-[rgba(0,0,0,0)] h-[1621.622px] left-[-0.45px] right-[0.45px] top-[0.19px]" data-name="Root">
-        {/* Background */}
-        <div className="absolute h-[1624px] left-[-0.1px] top-[-0.38px] w-[750px]" data-name="bg">
+        {/* Background - z-0 */}
+        <div className="absolute h-[1624px] left-[-0.1px] top-[-0.38px] w-[750px] z-0" data-name="bg">
           <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgBg} />
         </div>
 
-        {/* Side border */}
-        <div className="absolute bottom-0 h-[1621.622px] right-0 w-[1.126px]" data-name="Image">
-          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgImage13} />
+        {/* 烟花粒子效果 - z-5 在背景之上，内容之下 */}
+        <div className="absolute bg-[rgba(0,0,0,0)] h-[350.225px] left-0 top-0 w-[750px] z-5" data-name="Fireworks">
+          <GuangDianLiZi width={750} height={350} />
         </div>
 
-        {/* Groups - Main content */}
-        <div className="absolute bg-[rgba(0,0,0,0)] bottom-[266.89px] h-[1354.73px] right-0 w-[750px] overflow-visible" data-name="Groups">
+        {/* Groups - Main content - z-10 */}
+        <div className="absolute bg-[rgba(0,0,0,0)] bottom-[276.19px] h-[1188px] right-0 w-[750px] overflow-visible z-10" data-name="Groups">
           {/* 使用ScriptEditor组件 */}
           <ScriptEditor panels={panels} onUpdatePanel={updatePanel} />
-
-          {/* Top logo section */}
-          <div className="absolute bg-[rgba(0,0,0,0)] bottom-[1004.5px] h-[350.225px] right-0 w-[750px]" data-name="Groups">
-            {/* 春节光点粒子效果 */}
-            <GuangDianLiZi width={750} height={350} />
-            
-            {/* 顶部Logo和装饰 - 使用TopHeader组件 */}
-            <TopHeader />
-          </div>
         </div>
 
-        {/* Bottom button */}
-        <div className="absolute h-[91px] left-[-0.1px] top-[1404.62px] w-[750px]" data-name="Groups">
+        {/* Bottom button - z-20 */}
+        <div className="absolute bottom-0 h-[201px] left-0 w-[750px] z-20" data-name="Groups">
           <ButtoGroups onStartDrawing={() => onStartDrawing(panels)} onBack={onBack} />
+        </div>
+
+        {/* Bottom Logo - z-20 */}
+        <div className="absolute h-[38px] left-[313.66px] top-[1562.18px] w-[123px] z-20" data-name="logo">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgLogo} />
         </div>
       </div>
     </div>

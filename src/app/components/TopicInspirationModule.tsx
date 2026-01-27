@@ -4,6 +4,7 @@ import imgXunhuan1 from "figma:asset/1d8785d386faefce2995b19e9dc624bda0f0a905.pn
 import imgDenglong from "figma:asset/c429b6ee4e33878fd1233ec4aab222b7ba651367.png";
 import imgEmo from "figma:asset/d11bae0c4a990af9f311de74cb74ba8942251105.png";
 import imgXunhuan21 from "figma:asset/5d2e010a9242d6ecaf27e08c4cd77a95fc635c5f.png";
+import svgPaths from "@/imports/svg-q5dvwrmvjq";
 
 export interface TopicItem {
   id: string;
@@ -224,7 +225,7 @@ export default function TopicInspirationModule({
               <motion.button
                 key={topic.id}
                 onClick={() => handleButtonClick(topic.id)}
-                className="bg-[#fefefe] content-stretch flex gap-[4px] h-[51px] items-center pl-[8px] pr-[12px] py-[2px] relative rounded-[16px] shrink-0"
+                className="bg-[#f0f0f0] content-stretch flex gap-[4px] h-[51px] items-center pl-[8px] pr-[12px] py-[2px] relative rounded-[16px] shrink-0"
                 data-name="Button_hot"
                 whileTap={{ scale: 0.9 }}
                 transition={{ type: "spring", stiffness: 400, damping: 15 }}
@@ -245,16 +246,20 @@ export default function TopicInspirationModule({
                 
                 {/* Text and refresh icon */}
                 <div className="content-stretch flex gap-[4px] items-center relative shrink-0">
-                  <div className="flex flex-col font-['PingFang_SC:Bold',sans-serif] justify-center leading-[0] not-italic relative shrink-0 text-[#d57940] text-[23.649px] whitespace-nowrap">
+                  <div className="flex flex-col font-['PingFang_SC:Medium',sans-serif] justify-center leading-[0] not-italic relative shrink-0 text-[24px] text-black whitespace-nowrap">
                     <p className="leading-[normal] whitespace-pre">{topic.text}</p>
                   </div>
                   <motion.div 
-                    className="relative shrink-0 size-[16.892px]" 
+                    className="relative shrink-0 size-[24px]" 
                     data-name="xunhuan1"
                     animate={{ rotate: rotation }}
                     transition={{ duration: 0.6, ease: "easeInOut" }}
                   >
-                    <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgXunhuan1} />
+                    <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 24 24">
+                      <g opacity="0.3">
+                        <path clipRule="evenodd" d={svgPaths.p43c2c00} fill="#222222" fillRule="evenodd" />
+                      </g>
+                    </svg>
                   </motion.div>
                 </div>
               </motion.button>
@@ -268,22 +273,27 @@ export default function TopicInspirationModule({
             <motion.button
               key={topic.id}
               onClick={() => handleButtonClick(topic.id)}
-              className="bg-[#fefefe] content-stretch flex h-[51px] items-center pl-[16px] pr-[12px] py-[2px] relative rounded-[16px] shrink-0"
+              className="bg-[#f0f0f0] content-stretch flex h-[51px] items-center pl-[16px] pr-[12px] py-[2px] relative rounded-[16px] shrink-0"
               data-name="Button"
               whileTap={{ scale: 0.9 }}
               transition={{ type: "spring", stiffness: 400, damping: 15 }}
             >
+              <div aria-hidden="true" className="absolute border-[#fdf9e7] border-[1.126px] border-solid inset-0 pointer-events-none rounded-[16px]" />
               <div className="content-stretch flex gap-[4px] items-center relative shrink-0">
-                <div className="flex flex-col font-['PingFang_SC:Bold',sans-serif] justify-center leading-[0] not-italic relative shrink-0 text-[23.649px] text-black whitespace-nowrap">
+                <div className="flex flex-col font-['PingFang_SC:Regular',sans-serif] justify-center leading-[0] not-italic relative shrink-0 text-[23.649px] text-black whitespace-nowrap">
                   <p className="leading-[normal] whitespace-pre">{topic.text}</p>
                 </div>
                 <motion.div 
-                  className="relative shrink-0 size-[17px]" 
-                  data-name="xunhuan2 1"
+                  className="relative shrink-0 size-[24px]" 
+                  data-name="xunhuan1"
                   animate={{ rotate: rotation }}
                   transition={{ duration: 0.6, ease: "easeInOut" }}
                 >
-                  <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgXunhuan21} />
+                  <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 24 24">
+                    <g opacity="0.3">
+                      <path clipRule="evenodd" d={svgPaths.p43c2c00} fill="#222222" fillRule="evenodd" />
+                    </g>
+                  </svg>
                 </motion.div>
               </div>
             </motion.button>
@@ -296,7 +306,7 @@ export default function TopicInspirationModule({
         <div 
           className="absolute right-0 top-0 h-full w-[80px] pointer-events-none"
           style={{
-            background: 'linear-gradient(to right, rgba(255, 240, 186, 0) 0%, rgba(255, 240, 186, 0.8) 50%, rgba(255, 240, 186, 1) 100%)'
+            background: 'linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(255, 255, 255, 1) 100%)'
           }}
         />
       )}
