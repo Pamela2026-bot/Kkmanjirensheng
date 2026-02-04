@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import imgButtonBack from "figma:asset/1dcc6cffa51db4af7e261094697c9dd695f1dd7a.png";
-import imgFrame1321317227 from "figma:asset/59e5f22793b657bc21fdbb86a939d00ea239bd36.png";
+import imgFrame1321317227 from "figma:asset/59e5f70a382aa82b5e87fe96cd77271ca53c6cca.png";
 
 interface ButtonBackProps {
   onClick: () => void;

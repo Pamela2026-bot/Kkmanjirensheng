@@ -23,7 +23,7 @@ import imgDengpao from "figma:asset/b7f4048c7007d2bededa6552d67be0b630090bb8.png
 import imgDenglong from "figma:asset/c429b6ee4e33878fd1233ec4aab222b7ba651367.png";
 import imgEmo from "figma:asset/d11bae0c4a990af9f311de74cb74ba8942251105.png";
 import imgShangchuan1 from "figma:asset/8bc68a58078960f25d10cdd9cbefd4f89506c20d.png";
-import imgButton from "figma:asset/9d17f46e43c53e5709b80964a914732dc3612d5d.png";
+import imgButton from "figma:asset/2a38d8ee32b923475ddfe02fe2a81b885ea01b6d.png";
 import imgLogo from "figma:asset/c301e171aed62395c79f7ef941923a62626a0795.png";
 import img from "figma:asset/cacfd9097e1934d3ced6fd030f4b6949d7355d1d.png";
 import img1 from "figma:asset/0998c63f86525358d26fafa731b3801081346889.png";
