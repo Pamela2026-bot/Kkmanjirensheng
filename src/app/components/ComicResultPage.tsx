@@ -8,7 +8,7 @@ import svgPaths from "@/imports/svg-gye7ots30p";
 import imgButtonOne1 from "figma:asset/69de948d7cd03c37f1e947da1dc8143b986f071a.png";
 import imgLogo3 from "figma:asset/92dc9658465759a43da7aa00eb06e3555084cc95.png";
 import imgImgErweima from "figma:asset/bbf445879bc68e48a13f507f1ea6de17bf17e475.png";
-import imgQrCode from "figma:asset/f7cd03bc127f2158e7ceccbb61f0098f04691af1.png";
+import imgQrCode from "figma:asset/443cd836568e16b3992c8402bd79890daa36c12e.png";
 import imgButton from "figma:asset/62b74367e8997eb9fb995e952b61b74ce6350b36.png";
 import imgBg from "figma:asset/a414cc1cab9532be936d7017bf7b90b9478bb82f.png";
 import imgImgBiaoti1 from "figma:asset/53a7721e9074d13357770789642fa4c12f60cde6.png";

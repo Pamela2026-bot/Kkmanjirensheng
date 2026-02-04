@@ -10,7 +10,7 @@ import imgImgFenjing3 from "figma:asset/a52ad586e600889efc6d4d13f87843ab9cb840b3
 import imgImgFenjing4 from "figma:asset/acfc209956f8207c967483c533b9a98dff56bc68.png";
 import imgLogo3 from "figma:asset/92dc9658465759a43da7aa00eb06e3555084cc95.png";
 import imgImgErweima from "figma:asset/bbf445879bc68e48a13f507f1ea6de17bf17e475.png";
-import img from "figma:asset/f7cd03bc127f2158e7ceccbb61f0098f04691af1.png";
+import img from "figma:asset/443cd836568e16b3992c8402bd79890daa36c12e.png";
 import imgIcWeixin from "figma:asset/5be50b56b7550126314326c2300159aaf3e4baf2.png";
 import imgIcPengyouquan from "figma:asset/710ed1c6744864fc91fd99f2e32dc00bf46c2333.png";
 import imgIcQq from "figma:asset/d3025ffb8b182b9d38c49552ad2ee3dcfe3779a0.png";
